@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const SignInFormSchema = z.object({
   username: z.string().min(4, "Tên đăng nhập ít nhất 4 ký tự"),
@@ -33,6 +33,7 @@ export function SigninForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { signIn } = useAuthStore();
   const navigate = useNavigate();
 
   const {
@@ -49,12 +50,11 @@ export function SigninForm({
   });
 
   const onSubmit = async (data: SignInFormValues) => {
+    const { username, password } = data;
     try {
-      await api.post("auth/signin", data);
-      toast.success("Đăng nhập thành công");
-      reset();
-
-      navigate("/");
+      signIn(username, password);
+      reset(); // reset form
+      navigate("/"); // chuyển sang trang home
     } catch (error) {
       console.error(error);
       toast.error("Đăng ký thất bại. Hãy thử lại.");
