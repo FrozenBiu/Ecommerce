@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Navigate from "@/components/Navigate";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
@@ -86,22 +87,37 @@ const ProductList = () => {
                     priceToggle ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="All Products" />
-                    All Products
-                  </label>
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="Clothing" />
-                    Clothing
-                  </label>
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="Shoes" />
-                    Shoes
-                  </label>
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="Accessories" />
-                    Accessories
-                  </label>
+                  <Slider
+                    defaultValue={[100, 150]}
+                    max={200}
+                    step={1}
+                    className="px-3 h-6 rounded-full"
+                  />
+
+                  {/* <div className="mt-2 relative h-1.5 w-full rounded-full range-slider-track">
+                    <div className="absolute left-[25%] top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-white shadow cursor-grab"></div>
+                    <div className="absolute left-[75%] top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-white shadow cursor-grab"></div>
+                  </div> */}
+
+                  <div className="mt-4 flex items-center justify-between gap-4">
+                    <div className="flex flex-1 items-center rounded-lg border border-[#e8e7f3] bg-surface-light px-3 py-2 dark:border-[#2d2d45] dark:bg-surface-dark">
+                      <span className="text-xs text-text-secondary">$</span>
+                      <input
+                        className="w-full bg-transparent p-0 text-right text-sm font-medium focus:ring-0 border-none"
+                        type="number"
+                        value="25"
+                      />
+                    </div>
+                    <span className="text-text-secondary">-</span>
+                    <div className="flex flex-1 items-center rounded-lg border border-[#e8e7f3] bg-surface-light px-3 py-2 dark:border-[#2d2d45] dark:bg-surface-dark">
+                      <span className="text-xs text-text-secondary">$</span>
+                      <input
+                        className="w-full bg-transparent p-0 text-right text-sm font-medium focus:ring-0 border-none"
+                        type="number"
+                        value="150"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
