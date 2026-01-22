@@ -116,7 +116,7 @@ const Navigate = () => {
                   </DropdownMenu>
                 ) : (
                   <Button
-                    onClick={() => redirectToPage("login")}
+                    onClick={() => redirectToPage("signin")}
                     className="hover:bg-primary/90 hover:text-white border-primary font-semibold text-md cursor-pointer"
                   >
                     Login
