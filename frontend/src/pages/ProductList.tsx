@@ -3,18 +3,132 @@ import Navigate from "@/components/Navigate";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ProductCard from "@/components/ProductCard";
+import { useProductStore } from "@/stores/useProductStore";
+import { cn } from "@/lib/utils";
 
 const categoryList = ["All", "Clothing", "Shoes", "Accessories"];
-const sizeList = ["XS", "S", "M", "L", "XL", "2XL"];
+const statusList = ["New", "Hot", "Sale"];
 const priceList = ["0-20$", "21-50$", "51-100$", ">100$"];
 
 const ProductList = () => {
+  const { loading, productList, getProductList } = useProductStore();
+  const { products, totalPages } = productList; // lấy các thông tin của productList ra để dùng gọn hơn
+
+  const [position, setPosition] = useState("Category");
+
   const [categoryToggle, setCategoryToggle] = useState(false);
   const [priceToggle, setPriceToggle] = useState(false);
   const [sizeToggle, setSizeToggle] = useState(false);
+
+  const [pageNumber, setPageNumber] = useState(1);
+  const [minPrice, setMinPrice] = useState(1);
+  const [maxPrice, setMaxPrice] = useState(1);
+  const [category, setCategory] = useState("");
+
+  const [query, setQuery] = useState({
+    keyword: "",
+    pageNumber: 1,
+    minPrice: 1,
+    maxPrice: 99999,
+    category: "",
+  });
+
+  const page = query.pageNumber;
+  const generatePages = () => {
+    const pages = [];
+
+    // case tổng trang nhỏ -> show all
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    // luôn có trang 1
+    pages.push(1);
+
+    // nếu trang hiện tại > 3 => thêm "..."
+    if (page > 3) {
+      pages.push("...");
+    }
+
+    // trang ở giữa (page-1, page, page+1)
+    const start = Math.max(2, page - 1);
+    const end = Math.min(totalPages - 1, page + 1);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    // nếu page < totalPages - 2 => thêm "..."
+    if (page < totalPages - 2) {
+      pages.push("...");
+    }
+
+    // luôn có trang cuối
+    pages.push(totalPages);
+
+    return pages;
+  };
+
+  const pageToShow = generatePages();
+
+  const handleChangePage = (pageNumber: number) => {
+    setQuery((prev) => ({
+      ...prev,
+      pageNumber,
+    }));
+  };
+
+  const handleNext = () => {
+    setQuery((prev) => {
+      if (prev.pageNumber >= totalPages) return prev;
+      return { ...prev, pageNumber: prev.pageNumber + 1 };
+    });
+  };
+
+  const handlePrev = () => {
+    setQuery((prev) => {
+      if (prev.pageNumber <= 1) return prev;
+      return { ...prev, pageNumber: prev.pageNumber - 1 };
+    });
+  };
+
+  const fetchProducts = async (query: {
+    keyword: string;
+    pageNumber: number;
+    minPrice: number;
+    maxPrice: number;
+    category: string;
+  }) => {
+    await getProductList(query);
+  };
+
+  useEffect(() => {
+    fetchProducts(query);
+  }, [query]);
 
   return (
     <>
@@ -66,7 +180,7 @@ const ProductList = () => {
                         />
                         <Label
                           htmlFor={`option-${index + 1}}`}
-                          className="text-text-sub"
+                          className="text-text-sub text-lg"
                         >
                           {category}
                         </Label>
@@ -108,13 +222,13 @@ const ProductList = () => {
                 </div>
               </div>
 
-              {/* Size */}
+              {/* Status */}
               <div className="">
                 <div
                   onClick={() => setSizeToggle(!sizeToggle)}
                   className="flex w-full items-center justify-between cursor-pointer"
                 >
-                  <p className="font-bold text-lg">Size</p>
+                  <p className="font-bold text-lg">Status</p>
                   <ChevronDown
                     strokeWidth={2.5}
                     className={`size-5 text-text-sub transition-transform duration-300 ease-in-out ${sizeToggle ? "rotate-180" : "rotate-0"}`}
@@ -126,66 +240,135 @@ const ProductList = () => {
                     sizeToggle ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
-                  {sizeList.map((size) => (
+                  {statusList.map((status) => (
                     <Button
-                      key={size}
-                      data-size={size}
+                      key={status}
+                      data-status={status}
                       variant="ghost"
                       className={`border cursor-pointer rounded-md hover:bg-primary hover:text-white`}
                       onClick={(e) => {
-                        if (e.currentTarget.dataset.size === size) {
+                        if (e.currentTarget.dataset.status === status) {
                           e.currentTarget.classList.toggle("bg-primary");
                           e.currentTarget.classList.toggle("text-white");
                         }
                       }}
                     >
-                      {size}
+                      {status}
                     </Button>
                   ))}
                 </div>
               </div>
-
-              {/* Color */}
-              {/* <div className="">
-                <div
-                  onClick={() => setColorToggle(!colorToggle)}
-                  className="flex w-full items-center justify-between cursor-pointer"
-                >
-                  <p className="font-bold text-lg">Color</p>
-                  <ChevronDown
-                    strokeWidth={2.5}
-                    className={`size-5 text-text-sub transition-transform duration-300 ease-in-out ${colorToggle ? "rotate-180" : "rotate-0"}`}
-                  />
-                </div>
-
-                <div
-                  className={`flex flex-col gap-y-2 mt-3 overflow-hidden transition-all duration-300 text-text-sub ${
-                    colorToggle ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="All Products" />
-                    All Products
-                  </label>
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="Clothing" />
-                    Clothing
-                  </label>
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="Shoes" />
-                    Shoes
-                  </label>
-                  <label className="flex gap-3">
-                    <input type="radio" name="category" value="Accessories" />
-                    Accessories
-                  </label>
-                </div>
-              </div> */}
             </div>
           </div>
 
           {/* Products */}
-          <div className="bg-blue-500 flex-1">2</div>
+          <div className="flex-1 ">
+            {/* Top */}
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h2 className="text-5xl font-extrabold">New Arrivals</h2>
+                <p className="text-text-sub">
+                  Explore the latest additions to our minimalist collection
+                </p>
+              </div>
+
+              {/* Filter */}
+              <div className=" flex items-center gap-3">
+                <p className="text-text-sub">Sort by:</p>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-30">
+                      <div className="w-full h-full flex items-center justify-between">
+                        {position}
+                        <ChevronDown strokeWidth={2.5} />
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-32">
+                    <DropdownMenuGroup>
+                      <DropdownMenuRadioGroup
+                        value={position}
+                        onValueChange={setPosition}
+                      >
+                        <DropdownMenuRadioItem value="Category">
+                          Category
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="Price">
+                          Price
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="Size">
+                          Size
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+
+            {/* Middle */}
+            <div className="mt-6 grid grid-cols-4 grid-rows-2 gap-3">
+              {products.map((product, index) => {
+                return (
+                  <ProductCard
+                    key={index}
+                    status={product.status}
+                    productName={product.name}
+                    category={product.category}
+                    price={product.price}
+                    image={product.image}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Bottom */}
+            <div className="my-15">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={query.pageNumber === 1 ? undefined : handlePrev}
+                      className={cn(
+                        "cursor-pointer",
+                        query.pageNumber === 1 &&
+                          "pointer-events-none opacity-50",
+                      )}
+                    />
+                  </PaginationItem>
+
+                  {pageToShow.map((p, index) => (
+                    <PaginationItem key={index}>
+                      {p === "..." ? (
+                        <PaginationEllipsis />
+                      ) : (
+                        <PaginationLink
+                          isActive={p === query.pageNumber}
+                          onClick={() => handleChangePage(p)}
+                          className="cursor-pointer"
+                        >
+                          {p}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={
+                        query.pageNumber === totalPages ? undefined : handleNext
+                      }
+                      className={cn(
+                        "cursor-pointer",
+                        query.pageNumber === totalPages &&
+                          "pointer-events-none opacity-50",
+                      )}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          </div>
         </div>
       </section>
       <Footer />

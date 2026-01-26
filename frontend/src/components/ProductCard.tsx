@@ -9,7 +9,7 @@ export type ProductCardProps = {
 };
 
 const ProductCard = ({
-  status,
+  status = "",
   productName,
   category,
   price,
@@ -46,7 +46,7 @@ const ProductCard = ({
         </h3>
         <p className="text-text-sub dark:text-gray-400 text-sm">{category}</p>
         <div className="mt-2 flex items-center justify-between">
-          <span className="text-primary font-bold text-lg">${price}</span>
+          <span className="text-primary font-bold text-lg">${price}.00</span>
         </div>
       </div>
     </div>

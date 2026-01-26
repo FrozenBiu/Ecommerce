@@ -1,4 +1,5 @@
 import type { User } from "./user";
+import type { Product } from "./product";
 
 export type AuthState = {
   accessToken: string | null;
@@ -21,4 +22,24 @@ export type AuthState = {
   fetchMe: () => Promise<void>;
 
   refresh: () => Promise<void>;
+};
+
+export type ProductState = {
+  productList: { products: Product[]; page: number; totalPages: number };
+
+  loading: boolean;
+
+  setProductList: (productList: {
+    products: Product[];
+    page: number;
+    totalPages: number;
+  }) => void;
+
+  getProductList: (params: {
+    keyword: string;
+    pageNumber: number;
+    minPrice: number;
+    maxPrice: number;
+    category: string;
+  }) => Promise<void>;
 };

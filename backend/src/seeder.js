@@ -1,111 +1,146 @@
 import dotenv from "dotenv";
-import Product from "./models/Product.js"; // Đảm bảo đường dẫn đúng tới Model Product
-import connectDB from "./libs/db.js"; // Đảm bảo đường dẫn đúng tới file connect DB
+import Product from "./models/Product.js"; // Check đường dẫn này
+import connectDB from "./libs/db.js"; // Check đường dẫn này
+import axios from "axios"; // Nhớ cài axios: npm install axios
 
 dotenv.config();
 connectDB();
 
-// Dữ liệu mẫu để random
-const categories = [
-  {
-    name: "Quần áo",
+// Cấu hình danh mục và từ khóa tìm kiếm trên Unsplash
+const categoriesConfig = {
+  Clothing: {
+    keywords: ["fashion clothing", "shirt", "dress", "men fashion"],
     items: [
-      "Áo Thun",
-      "Áo Sơ Mi",
-      "Áo Hoodie",
-      "Quần Jeans",
-      "Quần Short",
-      "Chân Váy",
-      "Đầm Dạ Hội",
-      "Áo Khoác Bomber",
+      "T-Shirt",
+      "Hoodie",
+      "Jacket",
+      "Jeans",
+      "Sweater",
+      "Blazer",
+      "Dress",
+      "Coat",
     ],
+    images: [], // Sẽ chứa link ảnh thật từ Unsplash
   },
-  {
-    name: "Giày dép",
+  Shoes: {
+    keywords: ["sneakers", "shoes", "boots", "running shoes"],
     items: [
-      "Giày Sneaker",
-      "Giày Tây",
-      "Giày Cao Gót",
-      "Sandal",
-      "Boots Cao Cổ",
-      "Dép Slide",
+      "Sneakers",
+      "Running Shoes",
+      "Boots",
+      "Loafers",
+      "Sandals",
+      "High Heels",
     ],
+    images: [],
   },
-  {
-    name: "Phụ kiện",
+  Accessories: {
+    keywords: ["watch", "sunglasses", "handbag", "fashion accessories"],
     items: [
-      "Mũ Lưỡi Trai",
-      "Kính Mát",
-      "Thắt Lưng Da",
-      "Túi Tote",
-      "Đồng Hồ",
-      "Vòng Tay",
+      "Watch",
+      "Sunglasses",
+      "Leather Belt",
+      "Backpack",
+      "Handbag",
+      "Wallet",
     ],
+    images: [],
   },
-];
+};
 
 const adjectives = [
-  "Hàn Quốc",
-  "Cao Cấp",
+  "Premium",
   "Vintage",
-  "Retro",
-  "Basic",
-  "Streetwear",
-  "Mùa Hè",
-  "Limited Edition",
-  "Form Rộng",
+  "Classic",
+  "Urban",
+  "Modern",
+  "Luxury",
+  "Casual",
+  "Sporty",
 ];
+const statuses = ["New", "Hot", "Sale", ""];
+
+// Hàm lấy ảnh từ Unsplash (Gọi 1 lần lấy 30 ảnh)
+const fetchUnsplashImages = async (query) => {
+  try {
+    const response = await axios.get("https://api.unsplash.com/search/photos", {
+      params: {
+        client_id: process.env.UNSPLASH_ACCESS_KEY,
+        query: query,
+        per_page: 30, // Lấy 30 ảnh mỗi lần gọi
+        orientation: "squarish", // Lấy ảnh vuông cho đẹp (hoặc 'landscape')
+      },
+    });
+    // Chỉ lấy url loại 'regular' hoặc 'small'
+    return response.data.results.map((img) => img.urls.regular);
+  } catch (error) {
+    console.error(`⚠️ Lỗi lấy ảnh cho query "${query}":`, error.message);
+    return []; // Trả về mảng rỗng nếu lỗi
+  }
+};
 
 const importData = async () => {
   try {
-    // 1. Xóa sạch dữ liệu cũ (để tránh trùng lặp khi chạy lại)
     await Product.deleteMany();
-    console.log("Đã xóa dữ liệu cũ...");
+    console.log("🧹 Đã xóa dữ liệu cũ...");
+
+    console.log("⏳ Đang tải hình ảnh từ Unsplash (Vui lòng đợi 5-10s)...");
+
+    // 1. Gọi API Unsplash cho từng danh mục TRƯỚC khi vào vòng lặp
+    // (Cách này tiết kiệm request, chỉ tốn 3 requests thay vì 100)
+    for (const cat in categoriesConfig) {
+      const query = categoriesConfig[cat].keywords.join(" "); // Gộp keyword
+      categoriesConfig[cat].images = await fetchUnsplashImages(query);
+      console.log(
+        `   + Đã tải ${categoriesConfig[cat].images.length} ảnh cho ${cat}`,
+      );
+    }
 
     const products = [];
+    const catKeys = Object.keys(categoriesConfig);
 
-    // 2. Vòng lặp tạo 100 sản phẩm
+    // 2. Tạo 100 sản phẩm
     for (let i = 1; i <= 100; i++) {
       // Random Category
-      const randomCat =
-        categories[Math.floor(Math.random() * categories.length)];
+      const randomCatKey = catKeys[Math.floor(Math.random() * catKeys.length)];
+      const catData = categoriesConfig[randomCatKey];
 
-      // Random Tên sản phẩm (Ví dụ: Áo Thun Vintage)
-      const randomItem =
-        randomCat.items[Math.floor(Math.random() * randomCat.items.length)];
-      const randomAdj =
-        adjectives[Math.floor(Math.random() * adjectives.length)];
-      const productName = `${randomItem} ${randomAdj} - Mã ${i}`;
+      // Random Tên
+      const noun =
+        catData.items[Math.floor(Math.random() * catData.items.length)];
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
 
-      // Random Giá (Từ 100k đến 2 triệu, làm tròn số đẹp)
-      const randomPrice = Math.floor(Math.random() * 20 + 1) * 100000;
+      // Lấy ảnh thật: Dùng thuật toán xoay vòng (modulo) để không bị hết ảnh
+      // Nếu API lỗi không về ảnh thì dùng placeholder dự phòng
+      let realImage = `https://placehold.co/600x600?text=${noun}`;
+      if (catData.images.length > 0) {
+        realImage = catData.images[i % catData.images.length];
+      }
 
-      // Link ảnh giả lập (có hiện tên sản phẩm trên ảnh)
-      // Dùng dịch vụ placehold.co cho ổn định
-      const randomImage = `https://placehold.co/600x400?text=${encodeURIComponent(randomItem)}`;
+      const randomPrice = Math.floor(Math.random() * (500 - 10 + 1)) + 10;
+      const randomStatus =
+        statuses[Math.floor(Math.random() * statuses.length)];
 
       products.push({
-        name: productName,
-        image: randomImage,
-        description: `Mô tả chi tiết cho sản phẩm ${productName}. Chất liệu cao cấp, thoáng mát, phù hợp với nhiều phong cách thời trang hiện đại.`,
-        category: randomCat.name, // "Quần áo" hoặc "Giày dép"...
+        name: `${adj} ${noun}`,
+        image: realImage,
+        description: `Experience the best quality with our ${adj} ${noun}. Perfect for any occasion using Unsplash authentic imagery.`,
+        category: randomCatKey,
         price: randomPrice,
-        countInStock: Math.floor(Math.random() * 50), // Random kho từ 0 - 50
+        countInStock: Math.floor(Math.random() * 50) + 1,
+        status: randomStatus,
       });
     }
 
-    // 3. Insert vào Database
     await Product.insertMany(products);
-
-    console.log("✅ Đã tạo thành công 100 sản phẩm mẫu!");
+    console.log("✅ Đã tạo 100 sản phẩm với ảnh thật từ Unsplash!");
     process.exit();
   } catch (error) {
-    console.error(`❌ Lỗi: ${error.message}`);
+    console.error(`❌ Lỗi Seeder: ${error.message}`);
     process.exit(1);
   }
 };
 
-// Hàm xóa dữ liệu nếu cần (chạy lệnh: node seeder.js -d)
 const destroyData = async () => {
   try {
     await Product.deleteMany();
@@ -117,7 +152,6 @@ const destroyData = async () => {
   }
 };
 
-// Kiểm tra tham số dòng lệnh
 if (process.argv[2] === "-d") {
   destroyData();
 } else {

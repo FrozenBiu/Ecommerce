@@ -35,7 +35,7 @@ export const getProducts = async (req, res) => {
       .skip(pageSize * (page - 1))
       .sort({ createdAt: -1 }); // Mới nhất lên đầu
 
-    res.json({ products, page, pages: Math.ceil(count / pageSize) });
+    res.json({ products, page, totalPages: Math.ceil(count / pageSize) });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }

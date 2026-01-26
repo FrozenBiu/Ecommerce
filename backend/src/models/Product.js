@@ -8,6 +8,7 @@ const productSchema = mongoose.Schema(
     category: { type: String, required: true }, // Vd: "Áo thun", "Quần Jeans"
     price: { type: Number, required: true, default: 0 },
     countInStock: { type: Number, required: true, default: 0 },
+    status: { type: String, default: "" },
   },
   { timestamps: true },
 );
