@@ -41,5 +41,6 @@ export type ProductState = {
     minPrice: number;
     maxPrice: number;
     category: string;
+    sort: string;
   }) => Promise<void>;
 };
