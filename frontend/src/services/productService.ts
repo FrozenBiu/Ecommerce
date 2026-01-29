@@ -19,4 +19,15 @@ export const productService = {
       console.error(error);
     }
   },
+
+  getProductDetails: async (id: string | undefined) => {
+    try {
+      const url = `products/${id}`;
+      const res = await api.get(url);
+
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };

@@ -9,6 +9,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     page: 1,
     totalPages: 1,
   },
+  product: null,
   loading: false,
 
   setProductList: (productList: {
@@ -16,6 +17,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     page: number;
     totalPages: number;
   }) => set({ productList: productList }),
+  setProduct: (product: Product) => set({ product: product }),
 
   getProductList: async (params) => {
     try {
@@ -24,6 +26,19 @@ export const useProductStore = create<ProductState>((set, get) => ({
       const res = await productService.getProductList(params);
 
       get().setProductList(res);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  getProductDetails: async (id) => {
+    try {
+      set({ loading: true });
+      const product = await productService.getProductDetails(id);
+
+      get().setProduct(product);
     } catch (error) {
       console.error(error);
     } finally {

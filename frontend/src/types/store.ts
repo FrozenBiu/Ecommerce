@@ -26,6 +26,7 @@ export type AuthState = {
 
 export type ProductState = {
   productList: { products: Product[]; page: number; totalPages: number };
+  product: Product | null;
 
   loading: boolean;
 
@@ -34,6 +35,7 @@ export type ProductState = {
     page: number;
     totalPages: number;
   }) => void;
+  setProduct: (product: Product) => void;
 
   getProductList: (params: {
     keyword: string;
@@ -43,4 +45,6 @@ export type ProductState = {
     category: string;
     sort: string;
   }) => Promise<void>;
+
+  getProductDetails: (id: string | undefined) => Promise<void>;
 };

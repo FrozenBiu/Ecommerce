@@ -1,4 +1,5 @@
 import { ShoppingBasket } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export type ProductCardProps = {
   status: string;
@@ -17,8 +18,16 @@ const ProductCard = ({
   image,
   id,
 }: ProductCardProps) => {
+  const navigate = useNavigate();
+  const handleChangeToProductDetailsPage = () => {
+    navigate(`/products/${id}`);
+  };
+
   return (
-    <div className="cursor-pointer group relative flex flex-col bg-white dark:bg-gray-900 rounded-lg border border-border-subtle dark:border-gray-800 transition-all duration-300 hover:shadow-soft hover:border-primary/30 hover:-translate-y-1 overflow-hidden">
+    <div
+      onClick={handleChangeToProductDetailsPage}
+      className="cursor-pointer group relative flex flex-col bg-white dark:bg-gray-900 rounded-lg border border-border-subtle dark:border-gray-800 transition-all duration-300 hover:shadow-soft hover:border-primary/30 hover:-translate-y-1 overflow-hidden"
+    >
       <div className="relative w-full aspect-4/5 overflow-hidden bg-gray-100 dark:bg-gray-800">
         {status && (
           <span className="absolute top-3 left-3 z-10 bg-white dark:bg-gray-800 text-text-main dark:text-white text-xs font-bold px-2 py-1 rounded shadow-sm">

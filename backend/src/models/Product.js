@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 const productSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
-    image: { type: String, required: true }, // Link ảnh
+    image: { type: String, required: true }, // ảnh chính
+    images: [{ type: String }], // ảnh phụ
     description: { type: String, required: true },
-    category: { type: String, required: true }, // Vd: "Áo thun", "Quần Jeans"
+    category: { type: String, required: true },
     price: { type: Number, required: true, default: 0 },
     countInStock: { type: Number, required: true, default: 0 },
     status: { type: String, default: "" },
