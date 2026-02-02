@@ -1,6 +1,9 @@
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative w-full overflow-hidden bg-surface-light dark:bg-surface-dark/50">
       <div className="max-w-420 mx-auto px-4 md:px-8 py-12 md:py-24">
@@ -21,7 +24,10 @@ const Hero = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <button className="cursor-pointer px-8 py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+              <button
+                onClick={() => navigate("/products")}
+                className="cursor-pointer px-8 py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-2"
+              >
                 Shop Collection
                 <span className="material-symbols-outlined text-sm">
                   <ArrowRight size={20} />

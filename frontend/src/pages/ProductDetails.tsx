@@ -2,6 +2,8 @@ import Footer from "@/components/Footer";
 import Navigate from "@/components/Navigate";
 import { useProductStore } from "@/stores/useProductStore";
 import {
+  ArrowLeft,
+  ArrowRight,
   ChevronDown,
   Maximize2,
   Minus,
@@ -12,12 +14,18 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import "yet-another-react-lightbox/styles.css";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { loading, product, productList, getProductDetails, getProductList } =
     useProductStore();
   const [amount, setAmount] = useState(1);
+
+  const [currentImage, setCurrentImage] = useState<string | undefined>(
+    product?.image,
+  );
+  const thumbnailsImg = (product?.images as string[]) || [];
 
   const fetchProduct = async () => {
     try {
@@ -37,8 +45,42 @@ const ProductDetails = () => {
 
   useEffect(() => {
     fetchProduct();
-    console.log(product?.image);
   }, [id]);
+
+  useEffect(() => {
+    if (product && product.images && product.images.length > 0) {
+      setCurrentImage(product.images[0]);
+    } else if (product?.image) {
+      setCurrentImage(product.image);
+    }
+  }, [product]);
+
+  function openFullscreen() {
+    const img = document.querySelector(".main-img");
+    if (img && img.requestFullscreen) {
+      img.requestFullscreen();
+    }
+  }
+
+  function handleNextImg() {
+    if (!currentImage) return;
+    const index = thumbnailsImg.indexOf(currentImage);
+    if (index < thumbnailsImg.length - 1) {
+      setCurrentImage(thumbnailsImg[index + 1]);
+    } else {
+      setCurrentImage(thumbnailsImg[0]);
+    }
+  }
+
+  function handlePrevImg() {
+    if (!currentImage) return;
+    const index = thumbnailsImg.indexOf(currentImage);
+    if (index > 0) {
+      setCurrentImage(thumbnailsImg[index - 1]);
+    } else {
+      setCurrentImage(thumbnailsImg[thumbnailsImg.length - 1]);
+    }
+  }
 
   return (
     <div>
@@ -53,35 +95,51 @@ const ProductDetails = () => {
               {/* <!-- Main Image --> */}
               <div className="w-full aspect-4/3 md:aspect-16/10 lg:aspect-square xl:aspect-16/12 bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden relative group">
                 <div
-                  className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 bg-[url(${product?.image})]`}
+                  className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 `}
                 >
                   <img
-                    src={product?.image}
+                    src={currentImage}
                     alt=""
-                    className="object-cover size-full"
+                    className="main-img object-cover size-full"
                   />
                 </div>
+
                 <div className="absolute bottom-4 right-4 flex gap-2">
                   <button className="bg-white/90 dark:bg-black/50 backdrop-blur text-slate-900 dark:text-white p-3 rounded-full hover:scale-105 transition-transform shadow-sm">
                     <span className=" text-[20px]">
-                      <Maximize2 />
+                      <Maximize2 onClick={() => openFullscreen()} />
                     </span>
                   </button>
                 </div>
-              </div>
-              {/* <!-- Thumbnails Grid --> */}
 
+                {/* Button next */}
+                <div className="absolute right-2 top-1/2">
+                  <button className="size-11 bg-white/90 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/80">
+                    <ArrowRight className="size-7" onClick={handleNextImg} />
+                  </button>
+                </div>
+
+                {/* Button previous */}
+                <div className="absolute left-2 top-1/2">
+                  <button className="size-11 bg-white/90 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/80">
+                    <ArrowLeft className="size-7" onClick={handlePrevImg} />
+                  </button>
+                </div>
+              </div>
+
+              {/* <!-- Thumbnails Grid --> */}
               <div className="grid grid-cols-4 gap-4">
                 {product?.images.map((img) => (
                   <div
                     key={img}
-                    className="aspect-square rounded-xl bg-surface-light dark:bg-surface-dark overflow-hidden cursor-pointer ring-2 ring-primary ring-offset-2 ring-offset-white dark:ring-offset-background-dark"
+                    className={`aspect-square rounded-xl bg-surface-light dark:bg-surface-dark overflow-hidden cursor-pointer ${img === currentImage ? "ring-2 ring-primary ring-offset-2 ring-offset-white" : ""} dark:ring-offset-background-dark`}
                   >
                     <div className="w-full h-full bg-cover bg-center ">
                       <img
                         src={img}
                         alt=""
-                        className="object-cover size-full"
+                        className="thumbnails-img object-cover size-full"
+                        onClick={() => setCurrentImage(img)}
                       />
                     </div>
                   </div>
@@ -114,14 +172,17 @@ const ProductDetails = () => {
 
                 {/* <!-- Accordions --> */}
                 <div className="pt-4 space-y-2">
-                  <details className="group border-b border-slate-100 dark:border-slate-800 pb-4">
-                    <summary className="flex justify-between items-center font-semibold cursor-pointer text-slate-900 dark:text-white py-2">
+                  <details
+                    open
+                    className="group border-b border-slate-100 dark:border-slate-800 pb-4"
+                  >
+                    <summary className="flex justify-between items-center text-[20px] font-semibold cursor-pointer text-slate-900 dark:text-white py-2">
                       Description
                       <span className=" transition-transform group-open:rotate-180 text-slate-400">
                         <ChevronDown />
                       </span>
                     </summary>
-                    <div className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mt-2">
+                    <div className="text-slate-600 dark:text-slate-400 text-[18px] leading-relaxed mt-2">
                       <p>{product?.description}</p>
                     </div>
                   </details>
@@ -158,7 +219,9 @@ const ProductDetails = () => {
                   <span className=" text-primary">
                     <Van />
                   </span>
-                  <span>Free standard shipping on orders over $100</span>
+                  <span className="text-[16px]">
+                    Free standard shipping on orders over $100
+                  </span>
                 </div>
               </div>
             </div>

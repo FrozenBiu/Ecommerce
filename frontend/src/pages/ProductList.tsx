@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { useEffect } from "react";
 
 const ProductList = () => {
   // 1. Lấy Data từ Store
@@ -34,6 +35,10 @@ const ProductList = () => {
     togglePriceRange,
     resetFilters,
   } = useProductQuery();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

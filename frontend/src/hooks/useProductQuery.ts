@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useProductStore } from "@/stores/useProductStore";
+import { useSearchParams } from "react-router";
 
 const PRICE_RANGES = [
   { label: "0-20$", min: 0, max: 20 },
@@ -11,18 +12,27 @@ const PRICE_RANGES = [
 export const useProductQuery = () => {
   const { getProductList } = useProductStore();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // State
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<number[]>([]);
   const [sortLabel, setSortLabel] = useState("Newest");
+  const categoryFromUrl = searchParams.get("category") || "";
+
   const [query, setQuery] = useState({
     keyword: "",
     pageNumber: 1,
     minPrice: 0,
     maxPrice: 999999,
-    category: "",
+    category: categoryFromUrl,
     status: "",
     sort: "newest",
   });
+
+  useEffect(() => {
+    const cat = searchParams.get("category") || "";
+    setQuery((prev) => ({ ...prev, category: cat }));
+  }, [searchParams]);
 
   // Handlers
   const setPage = (pageNumber: number) => {
@@ -36,11 +46,7 @@ export const useProductQuery = () => {
   };
 
   const setCategory = (cat: string) => {
-    setQuery((prev) => ({
-      ...prev,
-      category: cat === "All" ? "" : cat,
-      pageNumber: 1,
-    }));
+    setSearchParams({ category: cat !== "All" ? cat : "" });
   };
 
   const setStatus = (status: string) => {
