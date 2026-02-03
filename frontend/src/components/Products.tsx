@@ -3,43 +3,6 @@ import ProductCard from "./ProductCard";
 import { useProductStore } from "@/stores/useProductStore";
 import { useEffect } from "react";
 
-// const productList: {
-//   status: string;
-//   productName: string;
-//   category: string;
-//   price: number;
-//   image: string;
-// }[] = [
-//   {
-//     status: "New",
-//     productName: "Cotton Basic Tee",
-//     category: "Essential Collection",
-//     price: 35,
-//     image: "/ProductCard/img1.png",
-//   },
-//   {
-//     status: "",
-//     productName: "Urban Denim Jacket",
-//     category: "Outerwear",
-//     price: 89,
-//     image: "/ProductCard/img2.png",
-//   },
-//   {
-//     status: "Sale",
-//     productName: "Vanguard Sneakers",
-//     category: "Footwear",
-//     price: 95,
-//     image: "/ProductCard/img3.png",
-//   },
-//   {
-//     status: "",
-//     productName: "Everyday Backpack",
-//     category: "Accessories",
-//     price: 65,
-//     image: "/ProductCard/img4.png",
-//   },
-// ];
-
 const Products = () => {
   const { productList, getProductList } = useProductStore();
   const query = {
@@ -60,7 +23,7 @@ const Products = () => {
 
   return (
     <section className="py-16 md:py-24 bg-background-light dark:bg-background-dark">
-      <div className="max-w-420 mx-auto px-4 md:px-8">
+      <div className="max-w-375 mx-auto px-4 md:px-8">
         {/* <!-- Section Header --> */}
         <div className="flex items-end justify-between mb-10">
           <div>

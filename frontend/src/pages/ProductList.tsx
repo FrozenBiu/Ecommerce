@@ -43,8 +43,8 @@ const ProductList = () => {
   return (
     <>
       <Navigate />
-      <section className="max-w-420 min-h-[75vh] mx-auto mt-5 px-4 md:px-8 py-5">
-        <div className="flex gap-5">
+      <section className="max-w-375 min-h-[75vh] mx-auto mt-5 px-4 md:px-8 py-5">
+        <div className="flex gap-10">
           {/* --- LEFT: SIDEBAR --- */}
           <FilterSidebar
             category={query.category}

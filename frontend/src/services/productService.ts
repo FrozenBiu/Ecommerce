@@ -30,4 +30,13 @@ export const productService = {
       console.error(error);
     }
   },
+
+  searchProduct: async (keyword: string) => {
+    try {
+      const res = await api.get("/products", { params: { keyword: keyword } });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };

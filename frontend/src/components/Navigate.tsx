@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState, type KeyboardEvent } from "react";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -24,6 +25,7 @@ const navItems = [
 
 const Navigate = () => {
   const { user, signOut } = useAuthStore();
+  const [searchInput, setSearchInput] = useState("");
 
   const navigate = useNavigate();
 
@@ -34,6 +36,12 @@ const Navigate = () => {
   const handleLogout = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      navigate(`/products?keyword=${searchInput}`);
+    }
   };
 
   return (
@@ -63,6 +71,9 @@ const Navigate = () => {
                 className="w-full h-10 pl-10 pr-4 bg-surface-light dark:bg-surface-dark border border-border-subtle dark:border-gray-700 rounded-full text-sm placeholder-text-sub focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                 placeholder="Search essentials..."
                 type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e)}
               />
             </div>
           </div>
@@ -97,10 +108,6 @@ const Navigate = () => {
                         <UserRound />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        {/* <DropdownMenuLabel className="text-md font-semibold">
-                        My Account
-                      </DropdownMenuLabel> */}
-                        {/* <DropdownMenuSeparator /> */}
                         <DropdownMenuItem className="text-md font-medium">
                           <UserRound className="size-5" />
                           Profile

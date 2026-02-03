@@ -13,14 +13,16 @@ export const useProductQuery = () => {
   const { getProductList } = useProductStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const [keywordParams, setKeywordParams] = useSearchParams();
 
   // State
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<number[]>([]);
   const [sortLabel, setSortLabel] = useState("Newest");
   const categoryFromUrl = searchParams.get("category") || "";
+  const keywordFromUrl = keywordParams.get("keyword") || "";
 
   const [query, setQuery] = useState({
-    keyword: "",
+    keyword: keywordFromUrl,
     pageNumber: 1,
     minPrice: 0,
     maxPrice: 999999,
@@ -33,6 +35,11 @@ export const useProductQuery = () => {
     const cat = searchParams.get("category") || "";
     setQuery((prev) => ({ ...prev, category: cat }));
   }, [searchParams]);
+
+  useEffect(() => {
+    const cat = keywordParams.get("keyword") || "";
+    setQuery((prev) => ({ ...prev, keyword: cat }));
+  }, [keywordParams]);
 
   // Handlers
   const setPage = (pageNumber: number) => {
