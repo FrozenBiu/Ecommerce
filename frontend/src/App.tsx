@@ -8,6 +8,7 @@ import ProductDetails from "./pages/ProductDetails";
 import { useAuthStore } from "./stores/useAuthStore";
 import { useEffect, useState } from "react";
 import About from "./pages/About";
+import Cart from "./pages/Cart";
 
 function App() {
   const { accessToken, user, loading, refresh, fetchMe } = useAuthStore();
@@ -43,6 +44,7 @@ function App() {
 
           {/* private routes */}
           <Route path="/" element={<HomePage />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
     </>

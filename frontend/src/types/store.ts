@@ -48,3 +48,13 @@ export type ProductState = {
 
   getProductDetails: (id: string | undefined) => Promise<void>;
 };
+
+export type CartState = {
+  productsInCart: [] | null;
+
+  getCurrentCart: () => Promise<void>;
+
+  addProductToCart: () => Promise<void>;
+
+  removeFromCart: () => Promise<void>;
+};

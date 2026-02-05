@@ -135,7 +135,8 @@ const Navigate = () => {
 
               {user && (
                 <button
-                  className={`relative p-2 text-text-main dark:text-white hover:text-primary ${user ? "hover:bg-surface-light" : ""} dark:hover:bg-white/5 rounded-full transition-colors group`}
+                  onClick={() => navigate("/cart")}
+                  className={`cursor-pointer relative p-2 text-text-main dark:text-white hover:text-primary ${user ? "hover:bg-surface-light" : ""} dark:hover:bg-white/5 rounded-full transition-colors group`}
                 >
                   <span className="block text-[24px]">
                     <ShoppingCart className="size-6" />

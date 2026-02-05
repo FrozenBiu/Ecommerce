@@ -11,22 +11,34 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 text-sm text-text-sub dark:text-gray-400">
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <a
+                  className="hover:text-primary transition-colors"
+                  href="/products"
+                >
                   New Arrivals
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <a
+                  className="hover:text-primary transition-colors"
+                  href="/products"
+                >
                   Best Sellers
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <a
+                  className="hover:text-primary transition-colors"
+                  href="/products"
+                >
                   Sale
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <a
+                  className="hover:text-primary transition-colors"
+                  href="/products"
+                >
                   All Products
                 </a>
               </li>
@@ -53,7 +65,10 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <a
+                  className="hover:text-primary transition-colors"
+                  href="/about"
+                >
                   Contact Us
                 </a>
               </li>
@@ -65,7 +80,10 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 text-sm text-text-sub dark:text-gray-400">
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <a
+                  className="hover:text-primary transition-colors"
+                  href="/about"
+                >
                   About
                 </a>
               </li>
