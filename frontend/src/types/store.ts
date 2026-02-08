@@ -1,5 +1,6 @@
 import type { User } from "./user";
 import type { Product } from "./product";
+import type { Cart } from "./cart";
 
 export type AuthState = {
   accessToken: string | null;
@@ -50,11 +51,25 @@ export type ProductState = {
 };
 
 export type CartState = {
-  productsInCart: [] | null;
+  loading: boolean;
+  cart: Cart | null;
 
-  getCurrentCart: () => Promise<void>;
+  getCurrentCart: (userId: string | undefined) => Promise<void>;
 
-  addProductToCart: () => Promise<void>;
+  addProductToCart: (
+    userId: string | undefined,
+    productId: string,
+    qty: number,
+  ) => Promise<void>;
 
-  removeFromCart: () => Promise<void>;
+  updateCart: (
+    userId: string | undefined,
+    productId: string,
+    qty: number,
+  ) => Promise<void>;
+
+  removeFromCart: (
+    userId: string | undefined,
+    productId: string,
+  ) => Promise<void>;
 };

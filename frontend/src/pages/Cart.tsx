@@ -1,9 +1,31 @@
 import CartItem from "@/components/cart/CartItem";
 import Navigate from "@/components/Navigate";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/stores/useAuthStore";
+import useCartStore from "@/stores/useCartStore";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
+  const { user, loading } = useAuthStore();
+  const { cart, getCurrentCart } = useCartStore();
+  const [cartLoading, setCartLoading] = useState(true);
+
+  useEffect(() => {
+    if (user?._id) {
+      getCurrentCart(user._id);
+      setCartLoading(false);
+    }
+  }, [user, getCurrentCart]);
+
+  const items = cart?.items || []; // danh sách sản phẩm trong giỏ hàng
+
+  const tax = Math.ceil(cart?.totalPrice * 0.05);
+  const orderTotal = cart?.totalPrice + tax;
+
+  if (loading || cartLoading) return <div>Đang tải...</div>;
+  if (!user) return <div>Vui lòng đăng nhập</div>;
+
   return (
     <>
       <Navigate />
@@ -20,9 +42,22 @@ const Cart = () => {
 
             {/* list of items */}
             <div className="my-5">
-              <CartItem />
-              <CartItem />
-              <CartItem />
+              {items && items.length > 0 ? (
+                items.map((item, index) => {
+                  return (
+                    <CartItem
+                      key={index}
+                      id={item.product}
+                      productImage={item.image}
+                      productName={item.name}
+                      price={item.price}
+                      quantity={item.qty}
+                    />
+                  );
+                })
+              ) : (
+                <p>Your cart is empty</p>
+              )}
             </div>
 
             <Button
@@ -41,7 +76,7 @@ const Cart = () => {
             <div className="my-5 space-y-2">
               <div className="flex items-center justify-between">
                 <p className="text-secondary font-medium">Subtotal</p>
-                <p className="font-semibold">$180.00</p>
+                <p className="font-semibold">${cart?.totalPrice}</p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-secondary font-medium">Shipping estimate</p>
@@ -49,7 +84,7 @@ const Cart = () => {
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-secondary font-medium">Tax</p>
-                <p className="font-semibold">$14.40</p>
+                <p className="font-semibold">${tax}</p>
               </div>
             </div>
 
@@ -57,7 +92,7 @@ const Cart = () => {
 
             <div className="flex items-center justify-between">
               <p className="font-bold text-lg">Order Total</p>
-              <p className="font-extrabold text-3xl">$144.40</p>
+              <p className="font-extrabold text-3xl">${orderTotal}</p>
             </div>
 
             <Button className="mt-5 rounded-2xl w-full cursor-pointer group py-5">

@@ -3,7 +3,7 @@ import { LayoutGrid } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-white dark:bg-gray-900 border-t border-border-subtle dark:border-gray-800 pt-16 pb-8">
-      <div className="max-w-375 mx-auto px-4 md:px-8">
+      <div className="max-w-420 mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
             <h3 className="font-bold text-text-main dark:text-white mb-4">

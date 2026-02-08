@@ -42,7 +42,7 @@ const FilterSidebar = ({
   };
 
   return (
-    <div className="shrink-0 w-70">
+    <div className="shrink-0 w-32 md:w-55 lg:w-70">
       {/* --- HEADER: FILTERS & RESET --- */}
       <div className="flex justify-between items-center mb-6">
         <p className="font-bold text-lg">FILTERS</p>

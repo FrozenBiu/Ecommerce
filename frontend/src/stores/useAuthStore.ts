@@ -72,6 +72,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const user = await authService.fetchMe();
 
       set({ user });
+
+      return user;
     } catch (error) {
       console.error(error);
       set({ user: null, accessToken: null });
