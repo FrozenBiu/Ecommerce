@@ -113,7 +113,7 @@ export const removeFromCart = async (req, res) => {
     if (cart) {
       // Lọc bỏ sản phẩm cần xóa
       cart.items = cart.items.filter(
-        (item) => item.product.toString() !== productId,
+        (item) => item.product?.toString() !== productId,
       );
       await cart.save();
       res.json(cart);

@@ -109,8 +109,8 @@ const Navigate = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem className="text-md font-medium">
-                          <UserRound className="size-5" />
-                          Profile
+                          {/* <UserRound className="size-5" /> */}
+                          {user.fullName}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={handleLogout}

@@ -1,5 +1,9 @@
+import { useAuthStore } from "@/stores/useAuthStore";
+import useCartStore from "@/stores/useCartStore";
+import { useProductStore } from "@/stores/useProductStore";
 import { ShoppingBasket } from "lucide-react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export type ProductCardProps = {
   status: string;
@@ -19,8 +23,23 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const { addProductToCart } = useCartStore();
+
   const handleChangeToProductDetailsPage = () => {
     navigate(`/products/${id}`);
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      if (user?._id) {
+        await addProductToCart(user?._id, id, 1);
+      } else {
+        navigate("/signin");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -42,6 +61,10 @@ const ProductCard = ({
         {/* <!-- Quick Action Buttons Overlay --> */}
         <div className="absolute bottom-3 right-3 flex flex-col gap-2 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
           <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart();
+            }}
             className="cursor-pointer w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full shadow-md hover:bg-primary-hover hover:scale-110 transition-all"
             title="Quick Add"
           >

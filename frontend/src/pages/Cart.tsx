@@ -5,11 +5,17 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import useCartStore from "@/stores/useCartStore";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const Cart = () => {
   const { user, loading } = useAuthStore();
   const { cart, getCurrentCart } = useCartStore();
   const [cartLoading, setCartLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     if (user?._id) {
@@ -37,7 +43,11 @@ const Cart = () => {
               <h2 className="font-extrabold text-4xl text-text-main">
                 Your Cart
               </h2>
-              <p className="text-secondary text-md mt-1">3 items in your bag</p>
+              {cart?.items.length > 0 && (
+                <p className="text-secondary text-md mt-1">
+                  {cart?.items.length} items in your bag
+                </p>
+              )}
             </div>
 
             {/* list of items */}
@@ -61,6 +71,7 @@ const Cart = () => {
             </div>
 
             <Button
+              onClick={handleBack}
               variant={"link"}
               className="mt-5 font-semibold text-md hover:font-bold hover:no-underline cursor-pointer group"
             >

@@ -56,6 +56,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       // gọi backend
       await authService.signOut();
+      get().clearState();
 
       toast.success("Đăng xuất thành công");
     } catch (error) {
@@ -98,7 +99,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error(error);
-      // toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
       get().clearState(); // xoá toàn bộ thông tin đăng nhập hiện tại
     } finally {
       set({ loading: false });

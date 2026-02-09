@@ -1,5 +1,7 @@
 import Footer from "@/components/Footer";
 import Navigate from "@/components/Navigate";
+import { useAuthStore } from "@/stores/useAuthStore";
+import useCartStore from "@/stores/useCartStore";
 import { useProductStore } from "@/stores/useProductStore";
 import {
   ArrowLeft,
@@ -18,6 +20,8 @@ import "yet-another-react-lightbox/styles.css";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const { user } = useAuthStore();
+  const { addProductToCart } = useCartStore();
   const { loading, product, productList, getProductDetails, getProductList } =
     useProductStore();
   const [amount, setAmount] = useState(1);
@@ -40,6 +44,12 @@ const ProductDetails = () => {
       getProductDetails(id);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleAddProductToCart = async () => {
+    if (user?._id) {
+      await addProductToCart(user._id, id, amount);
     }
   };
 
@@ -191,7 +201,17 @@ const ProductDetails = () => {
                 {/* <!-- CTA Actions --> */}
                 <div className="flex gap-4 pt-4">
                   <div className="flex items-center border border-slate-200 dark:border-slate-700 rounded-xl h-14 w-32 px-3">
-                    <button className="w-8 h-full flex items-center justify-center text-slate-500 hover:text-primary transition-colors">
+                    <button
+                      onClick={() => {
+                        if (amount > 2) {
+                          const newQty = Number(amount - 1);
+                          setAmount(newQty);
+                        } else {
+                          setAmount(1);
+                        }
+                      }}
+                      className="w-8 h-full flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                    >
                       <span className=" text-[18px] cursor-pointer">
                         <Minus />
                       </span>
@@ -200,15 +220,24 @@ const ProductDetails = () => {
                       className="w-full text-center bg-transparent border-none focus:ring-0 font-semibold text-slate-900 dark:text-white p-0"
                       type="text"
                       value={amount}
-                      onChange={() => setAmount(1)}
+                      onChange={(e) => setAmount(e.target.value)}
                     />
-                    <button className="w-8 h-full flex items-center justify-center text-slate-500 hover:text-primary transition-colors">
+                    <button
+                      onClick={() => {
+                        const newQty = Number(amount + 1);
+                        setAmount(newQty);
+                      }}
+                      className="w-8 h-full flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                    >
                       <span className=" text-[18px] cursor-pointer">
                         <Plus />
                       </span>
                     </button>
                   </div>
-                  <button className="cursor-pointer flex-1 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold h-14 shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                  <button
+                    onClick={handleAddProductToCart}
+                    className="cursor-pointer flex-1 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold h-14 shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                  >
                     <span>Add to Cart</span>
                     <span className=" text-[20px] ">
                       <ShoppingBasket />

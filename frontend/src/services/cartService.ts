@@ -18,7 +18,9 @@ export const cartService = {
   ) => {
     try {
       const res = await api.post(`cart/add`, {
-        params: { userId, productId, qty },
+        userId,
+        productId,
+        qty,
       });
 
       return res.data;
@@ -34,7 +36,9 @@ export const cartService = {
   ) => {
     try {
       const res = await api.put(`cart/update`, {
-        params: { userId, productId, qty },
+        userId,
+        productId,
+        qty,
       });
 
       return res.data;
@@ -46,7 +50,7 @@ export const cartService = {
   removeFromCart: async (userId: string | undefined, productId: string) => {
     try {
       const res = await api.delete(`cart/remove`, {
-        params: { userId, productId },
+        data: { userId, productId },
       });
 
       return res.data;

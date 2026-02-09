@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navigate from "@/components/Navigate";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/product/ProductCard";
 import ProductPagination from "@/components/product/ProductPagination";
 import FilterSidebar from "@/components/product/FilterSidebar";
 import { useProductStore } from "@/stores/useProductStore";
