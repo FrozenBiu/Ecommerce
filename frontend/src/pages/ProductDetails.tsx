@@ -48,7 +48,7 @@ const ProductDetails = () => {
   };
 
   const handleAddProductToCart = async () => {
-    if (user?._id) {
+    if (user?._id && id) {
       await addProductToCart(user._id, id, amount);
     }
   };
@@ -220,7 +220,7 @@ const ProductDetails = () => {
                       className="w-full text-center bg-transparent border-none focus:ring-0 font-semibold text-slate-900 dark:text-white p-0"
                       type="text"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={(e) => setAmount(Number(e.target.value))}
                     />
                     <button
                       onClick={() => {

@@ -13,7 +13,7 @@ export const useProductQuery = () => {
   const { getProductList } = useProductStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [keywordParams, setKeywordParams] = useSearchParams();
+  const [keywordParams] = useSearchParams();
 
   // State
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<number[]>([]);

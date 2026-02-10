@@ -30,6 +30,8 @@ function App() {
   useEffect(() => {
     init();
   }, []);
+
+  if (loading || starting) return <div>Loading...</div>;
   return (
     <>
       <Toaster richColors />

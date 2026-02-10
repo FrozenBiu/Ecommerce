@@ -1,9 +1,7 @@
 import { useAuthStore } from "@/stores/useAuthStore";
 import useCartStore from "@/stores/useCartStore";
-import { useProductStore } from "@/stores/useProductStore";
 import { ShoppingBasket } from "lucide-react";
 import { useNavigate } from "react-router";
-import { toast } from "sonner";
 
 export type ProductCardProps = {
   status: string;

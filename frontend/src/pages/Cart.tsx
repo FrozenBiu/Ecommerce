@@ -24,10 +24,17 @@ const Cart = () => {
     }
   }, [user, getCurrentCart]);
 
-  const items = cart?.items || []; // danh sách sản phẩm trong giỏ hàng
+  const items =
+    (cart?.items as Array<{
+      product: string;
+      image: string;
+      name: string;
+      price: number;
+      qty: number;
+    }>) || []; // danh sách sản phẩm trong giỏ hàng
 
-  const tax = Math.ceil(cart?.totalPrice * 0.05);
-  const orderTotal = cart?.totalPrice + tax;
+  const tax = Math.ceil((cart?.totalPrice ?? 0) * 0.05);
+  const orderTotal = (cart?.totalPrice ?? 0) + tax;
 
   if (loading || cartLoading) return <div>Đang tải...</div>;
   if (!user) return <div>Vui lòng đăng nhập</div>;
@@ -43,7 +50,7 @@ const Cart = () => {
               <h2 className="font-extrabold text-4xl text-text-main">
                 Your Cart
               </h2>
-              {cart?.items.length > 0 && (
+              {cart?.items && cart.items.length > 0 && (
                 <p className="text-secondary text-md mt-1">
                   {cart?.items.length} items in your bag
                 </p>
