@@ -16,7 +16,7 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://ecommerce-frontend-thbh.onrender.com/",
+    origin: process.env.FRONTEND_DOMAIN,
     credentials: true,
   }),
 );
