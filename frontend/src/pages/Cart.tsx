@@ -36,7 +36,7 @@ const Cart = () => {
     <>
       <Navigate />
       <main>
-        <section className="max-w-375 mx-auto px-4 md:px-8 py-10 md:py-16 flex justify-between gap-10">
+        <section className="max-w-375 mx-auto px-4 md:px-8 py-10 md:py-16 flex flex-col sm:flex-row justify-between sm:gap-10">
           {/* main content */}
           <div className="flex-1">
             <div>
@@ -81,7 +81,7 @@ const Cart = () => {
           </div>
 
           {/* Order summary */}
-          <div className="h-fit min-w-95 shadow-2xl rounded-lg p-8">
+          <div className="mt-10 sm:mt-0 h-fit min-w-95 shadow-2xl rounded-lg p-8">
             <p className="text-xl font-bold">Order Summary</p>
 
             <div className="my-5 space-y-2">

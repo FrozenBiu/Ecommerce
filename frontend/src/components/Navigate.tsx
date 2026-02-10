@@ -5,6 +5,7 @@ import {
   Search,
   ShoppingCart,
   UserRound,
+  X,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { NavLink, useNavigate } from "react-router";
@@ -15,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -26,6 +27,7 @@ const navItems = [
 const Navigate = () => {
   const { user, signOut } = useAuthStore();
   const [searchInput, setSearchInput] = useState("");
+  const [openMenuOnMobile, setOpenMenuOnMobile] = useState(false);
 
   const navigate = useNavigate();
 
@@ -43,6 +45,18 @@ const Navigate = () => {
       navigate(`/products?keyword=${searchInput}`);
     }
   };
+
+  useEffect(() => {
+    if (openMenuOnMobile) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [openMenuOnMobile]);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-border-subtle dark:border-gray-800">
@@ -147,11 +161,62 @@ const Navigate = () => {
                   </span>
                 </button>
               )}
-              <button className="md:hidden p-2 text-text-main dark:text-white hover:text-primary rounded-full transition-colors">
+
+              {/* Menu button trigger on mobile */}
+              <button
+                onClick={() => setOpenMenuOnMobile(!openMenuOnMobile)}
+                className="md:hidden p-2 text-text-main dark:text-white hover:text-primary rounded-full transition-colors"
+              >
                 <span className="block text-[24px]">
                   <Menu />
                 </span>
               </button>
+              <div
+                className={`sm:hidden h-screen block z-99 fixed inset-0 bg-white px-4 py-3 transition-all duration-300  ${openMenuOnMobile ? "translate-x-0" : "translate-x-110"}`}
+              >
+                <Button
+                  onClick={() => setOpenMenuOnMobile(false)}
+                  className="absolute right-3 top-3 rounded-full"
+                >
+                  <X />
+                </Button>
+                <nav className="flex flex-col items-center gap-6 text-lg font-medium text-text-sub dark:text-gray-400">
+                  {navItems.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setOpenMenuOnMobile(!openMenuOnMobile)}
+                      className={({ isActive }) =>
+                        `hover:text-primary transition-colors cursor-pointer hover:bg-transparent ${
+                          isActive
+                            ? "text-primary font-bold underline decoration-2 underline-offset-4"
+                            : "text-text-sub"
+                        }`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+
+                  <div className="flex flex-1 w-full px-10 mx-auto">
+                    <div className="relative w-full group">
+                      <span className="absolute inset-y-0 left-3 flex items-center text-text-sub dark:text-gray-400 group-focus-within:text-primary transition-colors">
+                        <span className="text-[20px]">
+                          <Search className="size-5" />
+                        </span>
+                      </span>
+                      <input
+                        className="w-full h-10 pl-10 pr-4 bg-surface-light dark:bg-surface-dark border border-border-subtle dark:border-gray-700 rounded-full text-sm placeholder-text-sub focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+                        placeholder="Search essentials..."
+                        type="text"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                      />
+                    </div>
+                  </div>
+                </nav>
+              </div>
             </div>
           </div>
         </div>

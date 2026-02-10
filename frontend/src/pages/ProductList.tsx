@@ -14,13 +14,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
-import { useEffect } from "react";
+import { ChevronDown, Funnel } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const ProductList = () => {
   // 1. Lấy Data từ Store
   const { loading, productList } = useProductStore();
   const { products, totalPages } = productList;
+
+  const [openFilterOnMobile, setOpenFilterOnMobile] = useState(false);
 
   // 2. Lấy Logic từ Custom Hook
   const {
@@ -40,37 +42,54 @@ const ProductList = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    if (openFilterOnMobile) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [openFilterOnMobile]);
+
   return (
     <>
       <Navigate />
       <section className="max-w-375 min-h-[75vh] mx-auto mt-5 px-4 md:px-8 py-5">
         <div className="flex gap-10">
           {/* --- LEFT: SIDEBAR --- */}
-          <FilterSidebar
-            category={query.category}
-            status={query.status}
-            selectedPriceRanges={selectedPriceRanges}
-            priceRanges={PRICE_RANGES}
-            onCategoryChange={setCategory}
-            onPriceChange={togglePriceRange}
-            onStatusChange={setStatus}
-            onReset={resetFilters}
-          />
+          <div className="hidden sm:block">
+            <FilterSidebar
+              category={query.category}
+              status={query.status}
+              selectedPriceRanges={selectedPriceRanges}
+              priceRanges={PRICE_RANGES}
+              onCategoryChange={setCategory}
+              onPriceChange={togglePriceRange}
+              onStatusChange={setStatus}
+              onReset={resetFilters}
+            />
+          </div>
 
           {/* --- RIGHT: CONTENT --- */}
           <div className="flex-1">
             {/* Header + Sort */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
+            <div className="flex items-center justify-end sm:justify-between gap-3 mb-6">
+              <div className="hidden sm:block">
                 <h2 className="text-4xl font-extrabold">New Arrivals</h2>
                 <p className="text-text-sub">Explore the collection</p>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-text-sub">Sort by:</span>
+                <span className="text-text-sub hidden sm:inline">Sort by:</span>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-40 justify-between">
+                    <Button
+                      variant="outline"
+                      className="sm:w-40 justify-between"
+                    >
                       {sortLabel}
                       <ChevronDown className="h-4 w-4 opacity-50" />
                     </Button>
@@ -110,6 +129,31 @@ const ProductList = () => {
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
+
+              {/* Filter for mobile */}
+              <Button
+                onClick={() => setOpenFilterOnMobile(!openFilterOnMobile)}
+                className="block sm:hidden flex items-center gap-3 bg-white text-black border"
+              >
+                Filter
+                <Funnel />
+              </Button>
+              <div
+                className={`sm:hidden block z-99 fixed inset-0 bg-white px-4 py-3 transition-all duration-300  ${openFilterOnMobile ? "translate-x-0" : "translate-x-110"}`}
+              >
+                <FilterSidebar
+                  category={query.category}
+                  status={query.status}
+                  selectedPriceRanges={selectedPriceRanges}
+                  priceRanges={PRICE_RANGES}
+                  openFilterOnMobile={openFilterOnMobile}
+                  onCategoryChange={setCategory}
+                  onPriceChange={togglePriceRange}
+                  onStatusChange={setStatus}
+                  onReset={resetFilters}
+                  setOpenFilterOnMobile={setOpenFilterOnMobile}
+                />
               </div>
             </div>
 

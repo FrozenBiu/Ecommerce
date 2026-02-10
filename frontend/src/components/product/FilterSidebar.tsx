@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -14,10 +14,12 @@ interface Props {
   status: string;
   selectedPriceRanges: number[];
   priceRanges: { label: string; min: number; max: number }[];
+  openFilterOnMobile?: boolean;
   onCategoryChange: (cat: string) => void;
   onPriceChange: (index: number) => void;
   onStatusChange: (status: string) => void;
   onReset: () => void;
+  setOpenFilterOnMobile?: (open: boolean) => void;
 }
 
 const FilterSidebar = ({
@@ -25,10 +27,12 @@ const FilterSidebar = ({
   status,
   selectedPriceRanges,
   priceRanges,
+  openFilterOnMobile,
   onCategoryChange,
   onPriceChange,
   onStatusChange,
   onReset,
+  setOpenFilterOnMobile,
 }: Props) => {
   // State quản lý việc đóng/mở các menu con (Accordion logic)
   const [openStates, setOpenStates] = useState({
@@ -42,9 +46,16 @@ const FilterSidebar = ({
   };
 
   return (
-    <div className="shrink-0 w-32 md:w-55 lg:w-70">
+    <div className="shrink-0 md:w-55 lg:w-65">
       {/* --- HEADER: FILTERS & RESET --- */}
       <div className="flex justify-between items-center mb-6">
+        <Button
+          variant={"ghost"}
+          className={`${openFilterOnMobile ? "block" : "hidden"}`}
+          onClick={() => setOpenFilterOnMobile?.(!openFilterOnMobile)}
+        >
+          <X />
+        </Button>
         <p className="font-bold text-lg">FILTERS</p>
         <Button
           variant="ghost"

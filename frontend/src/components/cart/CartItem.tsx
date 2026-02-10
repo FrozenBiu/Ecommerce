@@ -61,8 +61,8 @@ const CartItem = ({
     <div data-product-id={id}>
       <div className="my-6 border-[0.5px] divide-dashed rounded-full"></div>
 
-      <div className="flex gap-x-8">
-        <div className="rounded-2xl size-35">
+      <div className="flex gap-x-4 sm:gap-x-8">
+        <div className="rounded-2xl size-35 aspect-square">
           <img
             src={productImage}
             alt=""
@@ -77,30 +77,34 @@ const CartItem = ({
           </Badge>
         </div>
 
-        <div className="flex flex-col items-end gap-y-4">
-          <p className="font-bold text-lg">${price}.00</p>
-          <div className="flex items-center gap-x-6">
-            <div className="flex items-center gap-x-3 border border-neutral-300 px-2 py-1 rounded-2xl">
+        <div className="flex flex-col sm:gap-y-4">
+          {/* price */}
+          <p className="font-bold text-lg text-end">${price}.00</p>
+
+          <div className="flex sm:flex-row flex-col items-end sm:items-center sm:gap-x-3 gap-y-3 sm:mt-0 mt-3">
+            {/* amount */}
+            <div className="flex items-center gap-x-1 sm:gap-x-3 border border-neutral-300 px-1 sm:px-2 py-1 rounded-2xl">
               <Button
                 variant={"ghost"}
                 className="hover:bg-transparent hover:text-primary cursor-pointer"
                 onClick={handleMinus}
               >
-                <Minus className="size-4" />
+                <Minus className="size-3 sm:size-4" />
               </Button>
-              <span className="font-semibold text-lg">{qty}</span>
+              <span className="font-semibold text-md sm:text-lg">{qty}</span>
               <Button
                 variant={"ghost"}
                 className="hover:bg-transparent hover:text-primary cursor-pointer"
                 onClick={handlePlus}
               >
-                <Plus className="size-4" />
+                <Plus className="size-3 sm:size-4" />
               </Button>
             </div>
 
+            {/* delete item */}
             <Button
               variant="ghost"
-              className="flex items-center justify-center cursor-pointer group hover:text-red-600"
+              className="w-fit flex items-center justify-end sm:justify-center cursor-pointer group hover:text-red-600"
               onClick={handleDeleteFromCart}
             >
               <Trash2 className="size-5" />
