@@ -11,6 +11,9 @@ function routes(app) {
   app.use("/api/orders", protectedRoutes, orderRoute);
   app.use("/api/cart", protectedRoutes, cartRoute);
   app.use("/api/users", protectedRoutes, userRoute);
+  app.use("/ping", (req, res) => {
+    res.send("pong");
+  });
 }
 
 export default routes;
