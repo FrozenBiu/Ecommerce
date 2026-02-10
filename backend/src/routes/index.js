@@ -3,6 +3,7 @@ import productRoute from "./productRoute.js";
 import orderRoute from "./orderRoute.js";
 import cartRoute from "./cartRoute.js";
 import userRoute from "./userRoute.js";
+import pingRoute from "./pingRoute.js";
 import { protectedRoutes } from "../middlewares/authMiddleware.js";
 
 function routes(app) {
@@ -11,9 +12,7 @@ function routes(app) {
   app.use("/api/orders", protectedRoutes, orderRoute);
   app.use("/api/cart", protectedRoutes, cartRoute);
   app.use("/api/users", protectedRoutes, userRoute);
-  app.use("/ping", (req, res) => {
-    res.send("pong");
-  });
+  app.use("/ping", pingRoute);
 }
 
 export default routes;
