@@ -140,7 +140,7 @@ const ProductList = () => {
                 <Funnel />
               </Button>
               <div
-                className={`sm:hidden block z-99 fixed inset-0 bg-white px-4 py-3 transition-all duration-300  ${openFilterOnMobile ? "translate-x-0" : "translate-x-110"}`}
+                className={`z-99 fixed inset-0 bg-white px-4 py-3 transition-all duration-300  ${openFilterOnMobile ? "translate-x-0" : "-translate-x-full"}`}
               >
                 <FilterSidebar
                   category={query.category}

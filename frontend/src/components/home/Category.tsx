@@ -10,7 +10,7 @@ const Category = () => {
   return (
     <section className="py-8 bg-background-light dark:bg-background-dark border-b border-border-subtle dark:border-gray-800">
       <div className="max-w-375 mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-3 grid-rows-1 gap-3 overflow-x-auto hide-scrollbar pb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 grid-rows-1 gap-3 overflow-x-auto hide-scrollbar pb-2">
           {/* Clothing */}
           <button
             onClick={() => handleChange("Clothing")}
