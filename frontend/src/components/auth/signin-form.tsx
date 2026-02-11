@@ -57,7 +57,7 @@ export function SigninForm({
       navigate("/"); // chuyển sang trang home
     } catch (error) {
       console.error(error);
-      toast.error("Đăng ký thất bại. Hãy thử lại.");
+      toast.error("Tên người dùng hoặc mật khẩu không chính xác. Hãy thử lại!");
     }
   };
 

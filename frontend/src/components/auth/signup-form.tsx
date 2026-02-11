@@ -21,6 +21,7 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import api from "@/lib/axios";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const SignUpFormSchema = z.object({
   fullName: z.string().min(4, "Vui lòng nhập tên đầy đủ"),
@@ -35,6 +36,7 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"div">) {
   const navigate = useNavigate();
+  const { signUp } = useAuthStore();
 
   const {
     register,
@@ -52,7 +54,8 @@ export function SignupForm({
 
   const onSubmit = async (data: SignUpFormValues) => {
     try {
-      await api.post("auth/signup", data);
+      const { fullName, username, password } = data;
+      await signUp(fullName, username, password);
       toast.success(
         "Đăng ký thành công. Bạn sẽ được chuyển sang trang đăng nhập.",
       );
@@ -61,7 +64,7 @@ export function SignupForm({
       navigate("/signin");
     } catch (error) {
       console.error(error);
-      toast.error("Đăng ký thất bại. Hãy thử lại.");
+      toast.error("Đăng ký thất bại. Người dùng đã tồn tại. Hãy thử lại!");
     }
   };
 
