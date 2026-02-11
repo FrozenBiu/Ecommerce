@@ -159,7 +159,9 @@ const ProductList = () => {
 
             {/* Product Grid */}
             {loading ? (
-              <p>Loading...</p>
+              <div className="w-full h-full flex items-center justify-center">
+                Loading...
+              </div>
             ) : products.length === 0 ? (
               <div className="text-center py-20 text-gray-500">
                 No products found.

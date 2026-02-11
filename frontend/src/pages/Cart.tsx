@@ -1,4 +1,5 @@
 import CartItem from "@/components/cart/CartItem";
+import Loading from "@/components/Loading";
 import Navigate from "@/components/Navigate";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -36,8 +37,13 @@ const Cart = () => {
   const tax = Math.ceil((cart?.totalPrice ?? 0) * 0.05);
   const orderTotal = (cart?.totalPrice ?? 0) + tax;
 
-  if (loading || cartLoading) return <div>Đang tải...</div>;
-  if (!user) return <div>Vui lòng đăng nhập</div>;
+  if (loading || cartLoading) return <Loading />;
+  if (!user)
+    return (
+      <div className="w-screen h-screen flex items-center justify-center font-semibold text-3xl">
+        Vui lòng đăng nhập
+      </div>
+    );
 
   return (
     <>

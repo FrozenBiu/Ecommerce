@@ -9,6 +9,7 @@ import { useAuthStore } from "./stores/useAuthStore";
 import { useEffect, useState } from "react";
 import About from "./pages/About";
 import Cart from "./pages/Cart";
+import Loading from "./components/Loading";
 
 function App() {
   const { accessToken, user, loading, refresh, fetchMe } = useAuthStore();
@@ -31,7 +32,7 @@ function App() {
     init();
   }, []);
 
-  if (loading || starting) return <div>Loading...</div>;
+  if (loading || starting) return <Loading />;
   return (
     <>
       <Toaster richColors />

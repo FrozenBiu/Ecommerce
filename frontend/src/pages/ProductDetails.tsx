@@ -63,14 +63,6 @@ const ProductDetails = () => {
     }
   }, [product]);
 
-  // useEffect(() => {
-  //   if (product && product.images && product.images.length > 0) {
-  //     setCurrentImage(product.images[0]);
-  //   } else if (product?.image) {
-  //     setCurrentImage(product.image);
-  //   }
-  // }, [product]);
-
   function openFullscreen() {
     const img = document.querySelector(".main-img");
     if (img && img.requestFullscreen) {
