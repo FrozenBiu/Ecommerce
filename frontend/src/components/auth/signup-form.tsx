@@ -20,7 +20,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const SignUpFormSchema = z.object({
