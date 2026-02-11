@@ -12,7 +12,7 @@ import Cart from "./pages/Cart";
 import Loading from "./components/Loading";
 
 function App() {
-  const { accessToken, user, loading, refresh, fetchMe } = useAuthStore();
+  const { accessToken, user, refresh, fetchMe } = useAuthStore();
   const [starting, setStarting] = useState(true);
 
   const init = async () => {
@@ -32,7 +32,7 @@ function App() {
     init();
   }, []);
 
-  if (loading || starting) return <Loading />;
+  if (starting) return <Loading />;
   return (
     <>
       <Toaster richColors />
@@ -44,9 +44,9 @@ function App() {
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/about" element={<About />} />
+          <Route path="/" element={<HomePage />} />
 
           {/* private routes */}
-          <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
