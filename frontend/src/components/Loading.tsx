@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <body className="bg-background-light dark:bg-background-dark font-display flex flex-col items-center justify-center min-h-screen m-0 p-0 overflow-hidden">
+    <div className="bg-background-light dark:bg-background-dark font-display flex flex-col items-center justify-center min-h-screen m-0 p-0 overflow-hidden">
       {/* <!-- Main Splash Container --> */}
       <div className="relative w-full max-w-md px-8 flex flex-col items-center justify-center space-y-12">
         {/* <!-- Brand Logo Container --> */}
@@ -53,7 +53,7 @@ const Loading = () => {
           <div className="w-1 h-1 rounded-full bg-primary"></div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 
