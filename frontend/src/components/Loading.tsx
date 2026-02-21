@@ -43,9 +43,10 @@ const Loading = () => {
       </div>
       {/* <!-- Footer Branding (Optional/Subtle) --> */}
       <div className="absolute bottom-10 flex flex-col items-center">
-        <div className="text-[11px] font-medium text-gray-400 dark:text-gray-600 tracking-widest uppercase">
+        <div className="text-[11px] text-center font-medium text-gray-400 dark:text-gray-600 tracking-widest uppercase">
           © 2026 KSHOP GLOBAL
         </div>
+
         <div className="mt-2 flex space-x-1">
           <div className="w-1 h-1 rounded-full bg-gray-300"></div>
           <div className="w-1 h-1 rounded-full bg-gray-300"></div>
