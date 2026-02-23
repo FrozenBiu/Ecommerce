@@ -13,6 +13,7 @@ import * as z from "zod";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { AnimatePresence, motion } from "motion/react";
 
 const ShippingInformation = z.object({
   fullname: z.string().min(6, "Name must have at least 6 characters."),
@@ -67,11 +68,15 @@ const Checkout = () => {
 
       setVietqrUrl(res.data.data.qrDataURL);
       reset();
-      await removeAllFromCart(user?._id);
     } catch (error) {
       console.error("Lỗi khi gọi API VietQR", error);
       toast.error("Lỗi trong khi tạo mã QR thanh toán");
     }
+  };
+
+  const handleDone = async () => {
+    await removeAllFromCart(user?._id);
+    navigate("/cart");
   };
 
   useEffect(() => {
@@ -214,22 +219,29 @@ const Checkout = () => {
         </section>
       </main>
 
-      {vietqrUrl !== "" && (
-        <div className="fixed mt-18 inset-0 bg-black/20">
-          <div
-            ref={imageRef}
-            className="fixed top-30 left-0 p-8 gap-3 rounded-lg flex flex-col items-center justify-center bg-white translate-x-1/2"
-          >
-            <img src={vietqrUrl} className="object-cover" />
-            <Button
-              className="flex py-5 px-10 rounded-full cursor-pointer"
-              onClick={() => navigate("/cart")}
-            >
-              DONE
-            </Button>
+      <AnimatePresence>
+        {vietqrUrl.length > 0 && (
+          <div className="fixed mt-18 inset-0 bg-black/20">
+            <div className="w-full h-full flex items-center justify-center">
+              <motion.div
+                ref={imageRef}
+                className="p-8 gap-3 rounded-lg flex flex-col items-center justify-center bg-white"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img src={vietqrUrl} className="object-cover" />
+                <Button
+                  className="flex py-5 px-10 rounded-full cursor-pointer"
+                  onClick={handleDone}
+                >
+                  DONE
+                </Button>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };
