@@ -124,3 +124,20 @@ export const removeFromCart = async (req, res) => {
     res.status(500).json({ message: "Lỗi hệ thống" });
   }
 };
+
+export const removeAllFromCart = async (req, res) => {
+  const { userId } = req.body;
+  try {
+    let cart = await Cart.findOne({ user: userId });
+    if (cart) {
+      // Lọc bỏ sản phẩm cần xóa
+      cart.items = [];
+      await cart.save();
+      res.json(cart);
+    } else {
+      res.status(404).json({ message: "Cart not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi hệ thống" });
+  }
+};

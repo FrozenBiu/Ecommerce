@@ -58,4 +58,16 @@ export const cartService = {
       console.error(error);
     }
   },
+
+  removeAllFromCart: async (userId: string | undefined) => {
+    try {
+      const res = await api.delete(`cart/removeAll`, {
+        data: { userId },
+      });
+
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };

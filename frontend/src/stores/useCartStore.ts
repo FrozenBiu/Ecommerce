@@ -65,6 +65,21 @@ const useCartStore = create<CartState>((set, get) => ({
       set({ loading: false });
     }
   },
+
+  removeAllFromCart: async (userId) => {
+    try {
+      set({ loading: true });
+      const cart = await cartService.removeAllFromCart(userId);
+
+      get().getCurrentCart(userId);
+
+      set({ cart });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
 }));
 
 export default useCartStore;

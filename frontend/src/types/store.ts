@@ -72,4 +72,6 @@ export type CartState = {
     userId: string | undefined,
     productId: string,
   ) => Promise<void>;
+
+  removeAllFromCart: (userId: string | undefined) => Promise<void>;
 };

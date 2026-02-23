@@ -7,6 +7,7 @@ import useCartStore from "@/stores/useCartStore";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const Cart = () => {
   const { user, loading } = useAuthStore();
@@ -16,6 +17,15 @@ const Cart = () => {
 
   const handleBack = () => {
     navigate(-1);
+  };
+
+  const handleProceedToCheckout = () => {
+    if (Number(cart?.totalPrice) <= 0) {
+      toast.warning("Giỏ hàng của bạn chưa có sản phẩm nào.");
+      return;
+    }
+
+    navigate("/proceedOrder");
   };
 
   useEffect(() => {
@@ -120,7 +130,7 @@ const Cart = () => {
             </div>
 
             <Button
-              onClick={() => navigate("/proceedOrder")}
+              onClick={handleProceedToCheckout}
               className="mt-5 rounded-2xl w-full cursor-pointer group py-5"
             >
               Proceed to Checkout

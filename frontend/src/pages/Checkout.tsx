@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "axios";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const ShippingInformation = z.object({
   fullname: z.string().min(6, "Name must have at least 6 characters."),
@@ -23,10 +24,11 @@ type ShippingInformationValue = z.infer<typeof ShippingInformation>;
 
 const Checkout = () => {
   const { user, loading } = useAuthStore();
-  const { cart, getCurrentCart } = useCartStore();
+  const { cart, getCurrentCart, removeAllFromCart } = useCartStore();
   const [cartLoading, setCartLoading] = useState(true);
   const [vietqrUrl, setVietqrUrl] = useState("");
   const imageRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -57,14 +59,15 @@ const Checkout = () => {
         },
         {
           headers: {
-            "x-client-id": "883f1dc6-e430-408a-8db1-35dbae2fcc5d",
-            "x-api-key": "0d309383-4da0-41fa-b881-0072c631735c",
+            "x-client-id": import.meta.env.VIETQR_CLIENT_ID,
+            "x-api-key": import.meta.env.VIETQR_API_KEY,
           },
         },
       );
 
       setVietqrUrl(res.data.data.qrDataURL);
       reset();
+      await removeAllFromCart(user?._id);
     } catch (error) {
       console.error("Lỗi khi gọi API VietQR", error);
       toast.error("Lỗi trong khi tạo mã QR thanh toán");
@@ -79,9 +82,10 @@ const Checkout = () => {
   }, [user, getCurrentCart]);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = async (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (imageRef.current?.contains(target)) {
+
+      if (!imageRef.current?.contains(target)) {
         setVietqrUrl("");
       }
     };
@@ -214,9 +218,15 @@ const Checkout = () => {
         <div className="fixed mt-18 inset-0 bg-black/20">
           <div
             ref={imageRef}
-            className="fixed top-30 left-0 translate-x-[50%] w-full h-full"
+            className="fixed top-30 left-0 p-8 gap-3 rounded-lg flex flex-col items-center justify-center bg-white translate-x-1/2"
           >
-            <img src={vietqrUrl} className="-translate-x-1/2 object-cover" />
+            <img src={vietqrUrl} className="object-cover" />
+            <Button
+              className="flex py-5 px-10 rounded-full cursor-pointer"
+              onClick={() => navigate("/cart")}
+            >
+              DONE
+            </Button>
           </div>
         </div>
       )}

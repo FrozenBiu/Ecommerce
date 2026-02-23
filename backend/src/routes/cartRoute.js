@@ -2,6 +2,7 @@ import express from "express";
 import {
   addToCart,
   getCurrentCart,
+  removeAllFromCart,
   removeFromCart,
   updateCart,
 } from "../controllers/cartController.js";
@@ -23,8 +24,12 @@ router.post("/add", addToCart);
 // PUT /api/cart/update
 router.put("/update", updateCart);
 
-// 4. Xóa sản phẩm khỏi giỏ
+// 4. Xóa sản phẩm khỏi giỏ hàng
 // DELETE /api/cart/remove
 router.delete("/remove", removeFromCart);
+
+// 5. Xóa tất cả sản phẩm khỏi giỏ hàng
+// DELETE /api/cart/removeAll
+router.delete("/removeAll", removeAllFromCart);
 
 export default router;
