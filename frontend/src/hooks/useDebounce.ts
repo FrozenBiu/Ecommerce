@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 
-const useDebounce = (searchInput: string) => {
-  const [message, setMessage] = useState("");
+const useDebounce = (value: number, delay: number = 300) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    const a = setTimeout(() => {
-      setMessage(searchInput);
-      console.log(message);
-    }, 300);
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
 
     return () => {
-      clearTimeout(a);
+      clearTimeout(timer);
     };
-  }, [searchInput, message]);
+  }, [value, delay]);
 
-  return message;
+  return debouncedValue;
 };
 
 export default useDebounce;

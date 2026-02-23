@@ -4,6 +4,7 @@ import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
 import useCartStore from "@/stores/useCartStore";
 import { useAuthStore } from "@/stores/useAuthStore";
+import useDebounce from "@/hooks/useDebounce";
 
 export type CartItemProp = {
   id: string;
@@ -21,25 +22,18 @@ const CartItem = ({
   quantity,
 }: CartItemProp) => {
   const [qty, setQty] = useState(quantity);
+  const debouncedQty = useDebounce(qty, 300);
   const { updateCart, removeFromCart } = useCartStore();
   const { user } = useAuthStore();
 
   const handlePlus = async () => {
     const newQty = qty + 1;
     setQty(newQty);
-
-    if (user?._id) {
-      await updateCart(user._id, id, newQty);
-    }
   };
 
   const handleMinus = async () => {
     const newQty = qty - 1;
     setQty(newQty);
-
-    if (user?._id) {
-      await updateCart(user._id, id, newQty);
-    }
   };
 
   const handleDeleteFromCart = async () => {
@@ -52,6 +46,17 @@ const CartItem = ({
       await removeFromCart(user._id, id);
     }
   };
+
+  // Sau khi người dùng thay đổi số lượng sản phẩm, sau 300ms thì mới gọi API updateCart
+  useEffect(() => {
+    if (!debouncedQty) return;
+
+    const callAPI = async () => {
+      await updateCart(user?._id, id, qty);
+    };
+
+    callAPI();
+  }, [debouncedQty]);
 
   useEffect(() => {
     setQty(quantity);
