@@ -119,7 +119,10 @@ const Cart = () => {
               <p className="font-extrabold text-3xl">${orderTotal}</p>
             </div>
 
-            <Button className="mt-5 rounded-2xl w-full cursor-pointer group py-5">
+            <Button
+              onClick={() => navigate("/proceedOrder")}
+              className="mt-5 rounded-2xl w-full cursor-pointer group py-5"
+            >
               Proceed to Checkout
               <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
             </Button>

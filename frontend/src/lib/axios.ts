@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL:
     import.meta.env.MODE === "PRODUCTION"
       ? import.meta.env.API_URL
-      : "https://ecommerce-7i82.onrender.com/api",
+      : "http://localhost:5001/api/",
   withCredentials: true,
 });
 

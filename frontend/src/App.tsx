@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import About from "./pages/About";
 import Cart from "./pages/Cart";
 import Loading from "./components/Loading";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const { accessToken, user, refresh, fetchMe } = useAuthStore();
@@ -48,6 +49,7 @@ function App() {
 
           {/* private routes */}
           <Route path="/cart" element={<Cart />} />
+          <Route path="/proceedOrder" element={<Checkout />} />
         </Routes>
       </BrowserRouter>
     </>
