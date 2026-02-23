@@ -59,8 +59,8 @@ const Checkout = () => {
         },
         {
           headers: {
-            "x-client-id": import.meta.env.VIETQR_CLIENT_ID,
-            "x-api-key": import.meta.env.VIETQR_API_KEY,
+            "x-client-id": import.meta.env.VITE_VIETQR_CLIENT_ID,
+            "x-api-key": import.meta.env.VITE_VIETQR_API_KEY,
           },
         },
       );
