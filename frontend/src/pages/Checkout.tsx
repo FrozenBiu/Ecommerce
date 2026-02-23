@@ -7,7 +7,6 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import useCartStore from "@/stores/useCartStore";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -27,8 +26,7 @@ const Checkout = () => {
   const { cart, getCurrentCart } = useCartStore();
   const [cartLoading, setCartLoading] = useState(true);
   const [vietqrUrl, setVietqrUrl] = useState("");
-  const imageRef = useRef(null);
-  const navigate = useNavigate();
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -81,8 +79,8 @@ const Checkout = () => {
   }, [user, getCurrentCart]);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      const target = e.target;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
       if (imageRef.current?.contains(target)) {
         setVietqrUrl("");
       }
