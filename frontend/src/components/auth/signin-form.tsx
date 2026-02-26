@@ -18,7 +18,6 @@ import { LockKeyhole, ShoppingBag, User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/useAuthStore";
 
@@ -33,7 +32,7 @@ export function SigninForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { accessToken, signIn } = useAuthStore();
+  const { signIn } = useAuthStore();
   const navigate = useNavigate();
 
   const {
