@@ -2,7 +2,7 @@ import api from "@/lib/axios";
 
 export const userService = {
   updateInformation: async (
-    username: string,
+    username: string | undefined,
     fullName: string,
     currentPassword: string,
     newPassword: string,

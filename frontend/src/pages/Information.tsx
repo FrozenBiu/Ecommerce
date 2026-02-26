@@ -50,7 +50,6 @@ const Information = () => {
   const onSubmit = async (data: SchemaValue) => {
     try {
       const { currentPassword, newPassword } = data;
-      console.log(`===> Username: ${user?.username}`);
       const res = await userService.updateInformation(
         user?.username,
         fullName,
