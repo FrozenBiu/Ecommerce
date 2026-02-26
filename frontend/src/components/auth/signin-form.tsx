@@ -33,7 +33,7 @@ export function SigninForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { signIn } = useAuthStore();
+  const { accessToken, signIn } = useAuthStore();
   const navigate = useNavigate();
 
   const {
@@ -52,12 +52,11 @@ export function SigninForm({
   const onSubmit = async (data: SignInFormValues) => {
     const { username, password } = data;
     try {
-      signIn(username, password);
+      await signIn(username, password);
       reset(); // reset form
       navigate("/"); // chuyển sang trang home
     } catch (error) {
       console.error(error);
-      toast.error("Tên người dùng hoặc mật khẩu không chính xác. Hãy thử lại!");
     }
   };
 

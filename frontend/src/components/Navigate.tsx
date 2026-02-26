@@ -122,7 +122,10 @@ const Navigate = () => {
                         <UserRound />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem className="text-md font-medium">
+                        <DropdownMenuItem
+                          className="text-md font-medium"
+                          onClick={() => navigate("/information")}
+                        >
                           {/* <UserRound className="size-5" /> */}
                           {user.fullName}
                         </DropdownMenuItem>

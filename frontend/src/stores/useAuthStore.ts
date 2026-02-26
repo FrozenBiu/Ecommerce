@@ -24,8 +24,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         "Đăng ký thành công! Bạn sẽ được chuyển sang trang đăng nhập",
       );
     } catch (error) {
-      console.error(error);
       toast.error("Đăng ký không thành công!");
+      console.error(error);
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -43,8 +44,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       toast.success("Đăng nhập thành công");
     } catch (error) {
+      toast.error("Tài khoản hoặc mật khẩu không chính xác.");
       console.error(error);
-      toast.error("Đăng nhập không thành công");
+      throw error;
     } finally {
       set({ loading: false });
     }
